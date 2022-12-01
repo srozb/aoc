@@ -3,11 +3,7 @@ import nimib
 
 const DOCNAME = "d01p1"
 
-when defined(mdOutput):
-  nbInitMd
-else:
-  nbInit
-
+nbInit
 nb.title = DOCNAME
 
 nbText: """
@@ -32,14 +28,9 @@ nbCode:
       continue
     s.add l.parseInt
 
-when defined(mdOutput):
-  nb.filename = fmt"../../{DOCNAME}.md"
-else:
-  nb.filename = fmt"../../{DOCNAME}.html"
-
 nbText: fmt"""
-Result is: {highest}
+Answer is: **{highest}**
 """
 
+nb.filename = fmt"../../{DOCNAME}.html"
 nbSave
-

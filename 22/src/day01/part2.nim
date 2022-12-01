@@ -4,11 +4,7 @@ import std/algorithm
 
 const DOCNAME = "d01p2"
 
-when defined(mdOutput):
-  nbInitMd
-else:
-  nbInit
-
+nbInit
 nb.title = DOCNAME
 
 nbText: """
@@ -35,14 +31,9 @@ nbCode:
 
   sums.sort(Descending)
 
-when defined(mdOutput):
-  nb.filename = fmt"../../{DOCNAME}.md"
-else:
-  nb.filename = fmt"../../{DOCNAME}.html"
-
 nbText: fmt"""
-Result is: {sums[0] + sums[1] + sums[2]}
+Answer is: **{sums[0] + sums[1] + sums[2]}**
 """
 
+nb.filename = fmt"../../{DOCNAME}.html"
 nbSave
-
