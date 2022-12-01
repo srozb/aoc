@@ -15,12 +15,13 @@ nbCode:
   type
     Snacks = seq[Natural]
 
-  proc sum(s: Snacks): Natural =
+  func sum(s: Snacks): Natural =
     for c in s:
       result.inc c
 
-  var s: Snacks
-  var sums: seq[Natural]
+  var
+    s: Snacks
+    sums: seq[Natural]
 
   for l in "input.txt".lines:
     if l == "":
@@ -31,8 +32,10 @@ nbCode:
 
   sums.sort(Descending)
 
+  let answer = sums[0] + sums[1] + sums[2]
+
 nbText: fmt"""
-Answer is: **{sums[0] + sums[1] + sums[2]}**
+Answer is: **{answer}**
 """
 
 nb.filename = fmt"../../{DOCNAME}.html"

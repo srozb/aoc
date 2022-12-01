@@ -46,16 +46,17 @@ section#source {
 <pre><code class="nim hljs"><span class="hljs-keyword">type</span>
   <span class="hljs-type">Snacks</span> = <span class="hljs-built_in">seq</span>[<span class="hljs-built_in">int</span>]
 
-<span class="hljs-keyword">proc</span> sum(s: <span class="hljs-type">Snacks</span>): <span class="hljs-built_in">int</span> =
+<span class="hljs-keyword">func</span> sum(s: <span class="hljs-type">Snacks</span>): <span class="hljs-built_in">int</span> =
   <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> s:
     <span class="hljs-literal">result</span>.inc c
 
-<span class="hljs-keyword">var</span> s: <span class="hljs-type">Snacks</span>
-<span class="hljs-keyword">var</span> highest = <span class="hljs-number">0</span>
+<span class="hljs-keyword">var</span>
+  s: <span class="hljs-type">Snacks</span>
+  answer: <span class="hljs-type">Natural</span>
 
 <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.lines:
   <span class="hljs-keyword">if</span> l == <span class="hljs-string">&quot;&quot;</span>:
-    highest = max(highest, s.sum)
+    answer = max(answer, s.sum)
     s = @[]
     <span class="hljs-keyword">continue</span>
   s.add l.parseInt</code></pre>
@@ -100,22 +101,23 @@ nbCode:
   <span class="hljs-keyword">type</span>
     <span class="hljs-type">Snacks</span> = <span class="hljs-built_in">seq</span>[<span class="hljs-built_in">int</span>]
 
-  <span class="hljs-keyword">proc</span> sum(s: <span class="hljs-type">Snacks</span>): <span class="hljs-built_in">int</span> =
+  <span class="hljs-keyword">func</span> sum(s: <span class="hljs-type">Snacks</span>): <span class="hljs-built_in">int</span> =
     <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> s:
       <span class="hljs-literal">result</span>.inc c
 
-  <span class="hljs-keyword">var</span> s: <span class="hljs-type">Snacks</span>
-  <span class="hljs-keyword">var</span> highest = <span class="hljs-number">0</span>
+  <span class="hljs-keyword">var</span>
+    s: <span class="hljs-type">Snacks</span>
+    answer: <span class="hljs-type">Natural</span>
 
   <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.lines:
     <span class="hljs-keyword">if</span> l == <span class="hljs-string">&quot;&quot;</span>:
-      highest = max(highest, s.sum)
+      answer = max(answer, s.sum)
       s = @[]
       <span class="hljs-keyword">continue</span>
     s.add l.parseInt
 
 nbText: <span class="hljs-string">fmt&quot;&quot;&quot;
-Answer is: **{highest}**
+Answer is: **{answer}**
 &quot;&quot;&quot;</span>
 
 nb.filename = <span class="hljs-string">fmt&quot;../../{DOCNAME}.html&quot;</span>

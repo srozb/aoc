@@ -14,22 +14,23 @@ nbCode:
   type
     Snacks = seq[int]
 
-  proc sum(s: Snacks): int =
+  func sum(s: Snacks): int =
     for c in s:
       result.inc c
 
-  var s: Snacks
-  var highest = 0
+  var
+    s: Snacks
+    answer: Natural
 
   for l in "input.txt".lines:
     if l == "":
-      highest = max(highest, s.sum)
+      answer = max(answer, s.sum)
       s = @[]
       continue
     s.add l.parseInt
 
 nbText: fmt"""
-Answer is: **{highest}**
+Answer is: **{answer}**
 """
 
 nb.filename = fmt"../../{DOCNAME}.html"
