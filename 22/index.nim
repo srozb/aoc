@@ -3,7 +3,7 @@ import std/sequtils
 import os
 import nimib
 
-let paths = toSeq(walkPattern("d*p*.html"))
+let paths = toSeq(walkPattern("html/d*p*.html"))
 
 proc asTable(s: seq[string], title = ""): string =
   var day: int

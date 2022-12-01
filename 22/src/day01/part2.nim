@@ -38,5 +38,5 @@ nbText: fmt"""
 Answer is: **{answer}**
 """
 
-nb.filename = fmt"../../{DOCNAME}.html"
+nb.filename = fmt"../../html/{DOCNAME}.html"
 nbSave
