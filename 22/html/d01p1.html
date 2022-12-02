@@ -88,13 +88,16 @@ var objectID_620757154 = [0];
 <pre><code class="nim hljs"><span class="hljs-keyword">import</span> strformat, strutils
 <span class="hljs-keyword">import</span> nimib
 
-<span class="hljs-keyword">const</span> <span class="hljs-type">DOCNAME</span> = <span class="hljs-string">&quot;d01p1&quot;</span>
+<span class="hljs-keyword">const</span> 
+  <span class="hljs-type">DAY</span> = <span class="hljs-number">1</span>
+  <span class="hljs-type">PART</span> = <span class="hljs-number">1</span>
+  <span class="hljs-type">DOCNAME</span> = <span class="hljs-string">fmt&quot;d{DAY:02}p{PART}&quot;</span>
 
 nbInit
 nb.title = <span class="hljs-type">DOCNAME</span>
 
-nbText: <span class="hljs-string">&quot;&quot;&quot;
-# Day 01 part 1
+nbText: <span class="hljs-string">fmt&quot;&quot;&quot;
+# Day {DAY:02} part {PART}
 &quot;&quot;&quot;</span>
 
 nbCode:

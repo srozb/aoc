@@ -1,13 +1,16 @@
 import strformat, strutils
 import nimib
 
-const DOCNAME = "d01p1"
+const 
+  DAY = 1
+  PART = 1
+  DOCNAME = fmt"d{DAY:02}p{PART}"
 
 nbInit
 nb.title = DOCNAME
 
-nbText: """
-# Day 01 part 1
+nbText: fmt"""
+# Day {DAY:02} part {PART}
 """
 
 nbCode:

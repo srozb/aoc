@@ -2,13 +2,16 @@ import strformat, strutils
 import nimib
 import std/algorithm
 
-const DOCNAME = "d01p2"
+const 
+  DAY = 1
+  PART = 2
+  DOCNAME = fmt"d{DAY:02}p{PART}"
 
 nbInit
 nb.title = DOCNAME
 
-nbText: """
-# Day 01 part 2
+nbText: fmt"""
+# Day {DAY:02} part {PART}
 """
 
 nbCode:
