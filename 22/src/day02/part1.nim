@@ -22,18 +22,15 @@ nbCode:
 
   var answer: Natural
 
-  proc parse(strShape: string): Shape =
-    case strShape.strip.toLower
-    of "a": return rock
-    of "x": return rock
-    of "b": return papper
-    of "y": return papper
-    of "c": return scissors
-    of "z": return scissors
+  proc parse(strShape: char): Shape =
+    case strShape
+    of 'A', 'X': return rock
+    of 'B', 'Y': return papper
+    of 'C', 'Z': return scissors
     else:
       raise newException(OSError, "Unable to parse: " & strShape)
 
-  proc newRound(strThem, strUs: string): GameRound =
+  proc newRound(strThem, strUs: char): GameRound =
     result.them = parse(strThem)
     result.us = parse(strUs)
 
@@ -56,7 +53,7 @@ nbCode:
   for l in "input.txt".lines:
     if l.len != 3:
       continue
-    let round = newRound(l.splitWhitespace[0], l.splitWhitespace[1])
+    let round = newRound(l[0], l[2])
     answer.inc(round.score)
 
 nbText: fmt"""
