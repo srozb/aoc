@@ -23,7 +23,7 @@ nbCode:
       us, them: Shape
       outcome: Outcome
 
-  var answer: int
+  var answer: Natural
 
   proc parseShape(strShape: string): Shape =
     case strShape.strip.toLower
@@ -66,7 +66,7 @@ nbCode:
     result.outcome = parseOutcome(expOutcome)
     result.us = pickForUs(result.them, result.outcome)
 
-  func score(g: GameRound): int =
+  func score(g: GameRound): Natural =
     case g.us
     of rock: result.inc 
     of papper: result.inc 2

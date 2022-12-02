@@ -20,7 +20,7 @@ nbCode:
     GameRound = object
       them, us: Shape
 
-  var answer: int
+  var answer: Natural
 
   proc parse(strShape: string): Shape =
     case strShape.strip.toLower
@@ -45,7 +45,7 @@ nbCode:
   func isDraw(g: GameRound): bool =
     g.them == g.us
 
-  func score(g: GameRound): int =
+  func score(g: GameRound): Natural =
     case g.us
     of rock: result.inc 
     of papper: result.inc 2

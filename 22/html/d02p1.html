@@ -49,7 +49,7 @@ section#source {
   <span class="hljs-type">GameRound</span> = <span class="hljs-keyword">object</span>
     them, us: <span class="hljs-type">Shape</span>
 
-<span class="hljs-keyword">var</span> answer: <span class="hljs-built_in">int</span>
+<span class="hljs-keyword">var</span> answer: <span class="hljs-type">Natural</span>
 
 <span class="hljs-keyword">proc</span> parse(strShape: <span class="hljs-built_in">string</span>): <span class="hljs-type">Shape</span> =
   <span class="hljs-keyword">case</span> strShape.strip.toLower
@@ -74,7 +74,7 @@ section#source {
 <span class="hljs-keyword">func</span> isDraw(g: <span class="hljs-type">GameRound</span>): <span class="hljs-built_in">bool</span> =
   g.them == g.us
 
-<span class="hljs-keyword">func</span> score(g: <span class="hljs-type">GameRound</span>): <span class="hljs-built_in">int</span> =
+<span class="hljs-keyword">func</span> score(g: <span class="hljs-type">GameRound</span>): <span class="hljs-type">Natural</span> =
   <span class="hljs-keyword">case</span> g.us
   <span class="hljs-keyword">of</span> rock: <span class="hljs-literal">result</span>.inc 
   <span class="hljs-keyword">of</span> papper: <span class="hljs-literal">result</span>.inc <span class="hljs-number">2</span>
@@ -134,7 +134,7 @@ nbCode:
     <span class="hljs-type">GameRound</span> = <span class="hljs-keyword">object</span>
       them, us: <span class="hljs-type">Shape</span>
 
-  <span class="hljs-keyword">var</span> answer: <span class="hljs-built_in">int</span>
+  <span class="hljs-keyword">var</span> answer: <span class="hljs-type">Natural</span>
 
   <span class="hljs-keyword">proc</span> parse(strShape: <span class="hljs-built_in">string</span>): <span class="hljs-type">Shape</span> =
     <span class="hljs-keyword">case</span> strShape.strip.toLower
@@ -159,7 +159,7 @@ nbCode:
   <span class="hljs-keyword">func</span> isDraw(g: <span class="hljs-type">GameRound</span>): <span class="hljs-built_in">bool</span> =
     g.them == g.us
 
-  <span class="hljs-keyword">func</span> score(g: <span class="hljs-type">GameRound</span>): <span class="hljs-built_in">int</span> =
+  <span class="hljs-keyword">func</span> score(g: <span class="hljs-type">GameRound</span>): <span class="hljs-type">Natural</span> =
     <span class="hljs-keyword">case</span> g.us
     <span class="hljs-keyword">of</span> rock: <span class="hljs-literal">result</span>.inc 
     <span class="hljs-keyword">of</span> papper: <span class="hljs-literal">result</span>.inc <span class="hljs-number">2</span>
