@@ -1,4 +1,4 @@
-import strformat, strutils, sets, sequtils
+import strformat, strutils, sets
 import std/strscans
 import nimib
 
@@ -21,7 +21,8 @@ nbCode:
     return (a * b).len > 0
 
   proc fillSet(a,b: int): HashSet[int] =
-    result = toHashSet(toSeq(a..b))
+    result = initHashSet[int](b - a)
+    for i in a..b: result.incl i
 
   for l in "input.txt".lines:
     var a,b,c,d: int
