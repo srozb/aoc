@@ -1,26 +1,25 @@
-import strformat, strutils, sequtils
-import os
+import strformat, strutils, os
 import nimib
 
 const 
   TITLE = "Advent of Code"
 
-let paths = toSeq(walkPattern("2*/html/d*p*.html"))
-
-proc asTable(s: seq[string], year = ""): string =
-  var day: int
-  result = fmt"## 20{year:02}" & "\n\n"
+proc byYear(year: Natural): string =
+  let yearStr = ($year)[2..3]
+  result = fmt"## {year}" & "\n\n"
   result.add fmt"| day | solutions |" & '\n'
   result.add "|----------|----------|\n"
-  for i in 0..<s.len:
-    if not s[i].startsWith(year): continue
-    if i mod 2 == 0:
-      day.inc
-      result.add fmt"| {day} | [input]({year}/src/day{i+1:02}/input.txt) [part 1]({s[i]})"
-      if i == s.len - 1: result.add " |\n"
-    elif i < s.len: 
-      result.add fmt" [part 2]({s[i]})"
-      result.add " |\n"
+  for day in 1..25:
+    let
+      inFile = fmt"{yearStr}/src/day{day:02}/input.txt"
+      pOneFile = fmt"{yearStr}/html/d{day:02}p1.html"
+      pTwoFile = fmt"{yearStr}/html/d{day:02}p2.html"
+    if not inFile.fileExists: break
+    result.add fmt"| {day} | [input]({inFile}) "
+    if pOneFile.fileExists: result.add fmt"[part1]({pOneFile}) "
+    else: echo $pOneFile
+    if pTwoFile.fileExists: result.add fmt"[part2]({pTwoFile}) "
+    result.add "|\n"
 
 nbInit
 
@@ -29,8 +28,8 @@ nb.title = TITLE
 nbText: fmt"""
 # {TITLE}
 
-{paths.asTable("21")}
-{paths.asTable("22")}
+{2022.byYear}
+{2021.byYear}
 
 """
 

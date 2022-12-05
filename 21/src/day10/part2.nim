@@ -5,7 +5,7 @@ import nimib
 
 const 
   DAY = 10
-  PART = 12
+  PART = 2
   DOCNAME = fmt"d{DAY:02}p{PART}"
 
 nbInit
