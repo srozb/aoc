@@ -16,7 +16,7 @@ nbText: fmt"""
 nbCode:
   const 
     CAPACITY = 70_000_000
-    TARGET_SZ = 30_000_000
+    NEEDED = 30_000_000
 
   type 
     Entry = ref object
@@ -26,14 +26,18 @@ nbCode:
   var
     answer: Natural
     cwd = Entry()
-    level: int
-    dirSizes: seq[int]
+    level: Natural
+    dirSizes: seq[Natural]
 
-  proc goUp(e: var Entry) = 
+  proc goUp(e: var Entry) {.inline.} = 
     cwd.parent.size.inc cwd.size
     dirSizes.add cwd.size
     cwd = cwd.parent
     level.dec
+
+  proc goDown(e: var Entry) {.inline.} =
+    cwd = Entry(parent: cwd)
+    level.inc
 
   for l in "input.txt".lines:
     var
@@ -41,17 +45,14 @@ nbCode:
       item: string
     if l.scanf("$$ cd $+", item):
       if item == "..": cwd.goUp
-      else:
-        level.inc
-        cwd = Entry(parent: cwd)
+      else: cwd.goDown
     elif l.scanf("$i $w", size, item): cwd.size.inc size
+
   while level > 0: cwd.goUp
 
-  let spaceNeeded = abs(CAPACITY - TARGET_SZ - cwd.size)
-  dirSizes.sort()
-  for d in dirSizes:
+  for d in dirSizes.sorted:
     answer = d
-    if d > spaceNeeded: break
+    if d > abs(CAPACITY - NEEDED - cwd.size): break
 
 nbText: fmt"""
 Answer is: **{answer}**
