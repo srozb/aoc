@@ -47,7 +47,7 @@ section#source {
   <span class="hljs-type">FOREST_SZ</span> = <span class="hljs-number">99</span>
 
 <span class="hljs-keyword">type</span>
-  <span class="hljs-type">ForestMap</span> = <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-type">Natural</span>]]
+  <span class="hljs-type">ForestMap</span> = <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">char</span>]]
 
 <span class="hljs-keyword">var</span>
   forest: <span class="hljs-type">ForestMap</span>
@@ -75,7 +75,7 @@ section#source {
   <span class="hljs-keyword">var</span> lIdx: <span class="hljs-type">Natural</span>
   <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.lines:
     <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;line.len:
-      forest[lIdx][col] = line[col].<span class="hljs-built_in">int</span> - <span class="hljs-string">'0'</span>.<span class="hljs-built_in">int</span>  <span class="hljs-comment"># to avoid str allocation</span>
+      forest[lIdx][col] = line[col]  <span class="hljs-comment"># to avoid str allocation</span>
     lIdx.inc
 
 readFile()
@@ -128,7 +128,7 @@ nbCode:
     <span class="hljs-type">FOREST_SZ</span> = <span class="hljs-number">99</span>
 
   <span class="hljs-keyword">type</span>
-    <span class="hljs-type">ForestMap</span> = <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-type">Natural</span>]]
+    <span class="hljs-type">ForestMap</span> = <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">array</span>[<span class="hljs-type">FOREST_SZ</span>, <span class="hljs-built_in">char</span>]]
 
   <span class="hljs-keyword">var</span>
     forest: <span class="hljs-type">ForestMap</span>
@@ -156,7 +156,7 @@ nbCode:
     <span class="hljs-keyword">var</span> lIdx: <span class="hljs-type">Natural</span>
     <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.lines:
       <span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;line.len:
-        forest[lIdx][col] = line[col].<span class="hljs-built_in">int</span> - <span class="hljs-string">'0'</span>.<span class="hljs-built_in">int</span>  <span class="hljs-comment"># to avoid str allocation</span>
+        forest[lIdx][col] = line[col]  <span class="hljs-comment"># to avoid str allocation</span>
       lIdx.inc
 
   readFile()

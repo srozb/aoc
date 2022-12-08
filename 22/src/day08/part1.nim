@@ -18,7 +18,7 @@ nbCode:
     FOREST_SZ = 99
 
   type
-    ForestMap = array[FOREST_SZ, array[FOREST_SZ, Natural]]
+    ForestMap = array[FOREST_SZ, array[FOREST_SZ, char]]
 
   var
     forest: ForestMap
@@ -46,7 +46,7 @@ nbCode:
     var lIdx: Natural
     for line in "input.txt".lines:
       for col in 0..<line.len:
-        forest[lIdx][col] = line[col].int - '0'.int  # to avoid str allocation
+        forest[lIdx][col] = line[col]
       lIdx.inc
 
   readFile()
