@@ -41,8 +41,7 @@ nbCode:
     a.y = a.y + b.y
 
   func update(tail: var Vec2i, head: Vec2i) =
-    if dist(tail, head) < 1.5: return
-    tail += head - tail
+    if dist(tail, head) > 1.5: tail += head - tail
 
   proc move(head: var Vec2i, i, j: int) =
     var 
@@ -61,8 +60,7 @@ nbCode:
       elif y < 0:
         head.y.dec
         y.inc
-      for i in 0..<tails.len-1:
-        tails[i+1].update(tails[i])
+      for i in 0..<tails.len-1: tails[i+1].update(tails[i])
       posVisited.incl tails[tails.len-1]
 
   posVisited.incl tails[0]  # Add the beggining position (0,0)

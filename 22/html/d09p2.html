@@ -69,8 +69,7 @@ section#source {
   a.y = a.y + b.y
 
 <span class="hljs-keyword">func</span> update(tail: <span class="hljs-keyword">var</span> <span class="hljs-type">Vec2i</span>, head: <span class="hljs-type">Vec2i</span>) =
-  <span class="hljs-keyword">if</span> dist(tail, head) &lt; <span class="hljs-number">1.5</span>: <span class="hljs-keyword">return</span>
-  tail += head - tail
+  <span class="hljs-keyword">if</span> dist(tail, head) &gt; <span class="hljs-number">1.5</span>: tail += head - tail
 
 <span class="hljs-keyword">proc</span> move(head: <span class="hljs-keyword">var</span> <span class="hljs-type">Vec2i</span>, i, j: <span class="hljs-built_in">int</span>) =
   <span class="hljs-keyword">var</span> 
@@ -89,8 +88,7 @@ section#source {
     <span class="hljs-keyword">elif</span> y &lt; <span class="hljs-number">0</span>:
       head.y.dec
       y.inc
-    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;tails.len-<span class="hljs-number">1</span>:
-      tails[i+<span class="hljs-number">1</span>].update(tails[i])
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;tails.len-<span class="hljs-number">1</span>: tails[i+<span class="hljs-number">1</span>].update(tails[i])
     posVisited.incl tails[tails.len-<span class="hljs-number">1</span>]
 
 posVisited.incl tails[<span class="hljs-number">0</span>]  <span class="hljs-comment"># Add the beggining position (0,0)</span>
@@ -169,8 +167,7 @@ nbCode:
     a.y = a.y + b.y
 
   <span class="hljs-keyword">func</span> update(tail: <span class="hljs-keyword">var</span> <span class="hljs-type">Vec2i</span>, head: <span class="hljs-type">Vec2i</span>) =
-    <span class="hljs-keyword">if</span> dist(tail, head) &lt; <span class="hljs-number">1.5</span>: <span class="hljs-keyword">return</span>
-    tail += head - tail
+    <span class="hljs-keyword">if</span> dist(tail, head) &gt; <span class="hljs-number">1.5</span>: tail += head - tail
 
   <span class="hljs-keyword">proc</span> move(head: <span class="hljs-keyword">var</span> <span class="hljs-type">Vec2i</span>, i, j: <span class="hljs-built_in">int</span>) =
     <span class="hljs-keyword">var</span> 
@@ -189,8 +186,7 @@ nbCode:
       <span class="hljs-keyword">elif</span> y &lt; <span class="hljs-number">0</span>:
         head.y.dec
         y.inc
-      <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;tails.len-<span class="hljs-number">1</span>:
-        tails[i+<span class="hljs-number">1</span>].update(tails[i])
+      <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;tails.len-<span class="hljs-number">1</span>: tails[i+<span class="hljs-number">1</span>].update(tails[i])
       posVisited.incl tails[tails.len-<span class="hljs-number">1</span>]
 
   posVisited.incl tails[<span class="hljs-number">0</span>]  <span class="hljs-comment"># Add the beggining position (0,0)</span>
