@@ -20,7 +20,6 @@ nbCode:
     SCREEN = array[6, array[40, bool]]
 
   var
-    answer: int
     crtCpu = CPU(x: 1)
     scr: SCREEN
 
