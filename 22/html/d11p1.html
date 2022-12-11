@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title>d11p1</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🐳</text></svg>">
+  <meta content="text/html; charset=utf-8" http-equiv="content-type">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link rel='stylesheet' href='https://unpkg.com/normalize.css'>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/pietroppeter/nimib/assets/atom-one-light.css'>
+  <style>
+.nb-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nb-small {
+  font-size: 0.8rem;
+}
+button.nb-small {
+  float: right;
+  padding: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+section#source {
+  display:none
+}
+
+.nb-output {
+  line-height: 1.15;
+}
+</style>
+  
+</head>
+<body>
+<header>
+<div class="nb-box">
+  <span><a href=".">🏡</a></span>
+  <span><code>part2.nim</code></span>
+  <span><a href="https://github.com/srozb/aoc"><svg aria-hidden="true" width="1.2em" height="1.2em" style="vertical-align: middle;" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27c.68 0 1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill="#000"></path></svg></a></span>
+</div>
+<hr>
+</header><main>
+<h1>Day 11 part 1</h1>
+<pre><code class="nim hljs"><span class="hljs-keyword">const</span> <span class="hljs-type">ROUNDS</span> = <span class="hljs-number">20</span>
+
+<span class="hljs-keyword">type</span>
+  <span class="hljs-type">Monkey</span> = <span class="hljs-keyword">ref</span> <span class="hljs-keyword">object</span>
+    items: <span class="hljs-built_in">seq</span>[<span class="hljs-built_in">float</span>]
+    riskOp: <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span>
+    divisor, passTrue, passFalse, inspectCount: <span class="hljs-type">Natural</span>
+
+<span class="hljs-keyword">var</span>
+  monkeys = newSeq[<span class="hljs-type">Monkey</span>]()
+  answer: <span class="hljs-type">Natural</span>
+
+<span class="hljs-keyword">proc</span> inspectItems(m: <span class="hljs-keyword">var</span> <span class="hljs-type">Monkey</span>) =
+  m.items.apply(m.riskOp)
+  <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> m.items:
+    m.inspectCount.inc
+    <span class="hljs-keyword">let</span> targetMonkey = <span class="hljs-keyword">if</span> item.<span class="hljs-built_in">int</span> <span class="hljs-keyword">mod</span> m.divisor == <span class="hljs-number">0</span>: m.passTrue <span class="hljs-keyword">else</span>: m.passFalse
+    monkeys[targetMonkey].items.add item
+  m.items = @[]
+
+<span class="hljs-keyword">proc</span> newMonkey(s: <span class="hljs-built_in">string</span>): <span class="hljs-type">Monkey</span> =
+  <span class="hljs-literal">result</span> = <span class="hljs-type">Monkey</span>()
+  <span class="hljs-keyword">var</span> attrs = s.splitLines
+  <span class="hljs-keyword">while</span> attrs.len &gt; <span class="hljs-number">0</span>:
+    <span class="hljs-keyword">var</span> a = attrs.pop.split(<span class="hljs-string">':'</span>)
+    <span class="hljs-keyword">case</span> a[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Starting items&quot;</span>:
+      a[<span class="hljs-number">1</span>] = a[<span class="hljs-number">1</span>].replace(<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-string">&quot;&quot;</span>)
+      <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> a[<span class="hljs-number">1</span>].split(<span class="hljs-string">','</span>): <span class="hljs-literal">result</span>.items.add i.parseInt.<span class="hljs-built_in">float</span>
+    <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Operation&quot;</span>:
+      <span class="hljs-keyword">let</span> parsed = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">2</span>)
+      <span class="hljs-keyword">if</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;*&quot;</span> <span class="hljs-keyword">and</span> parsed[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;old&quot;</span>:
+        <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = risk * risk
+      <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;*&quot;</span>:
+        <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = 
+          risk * parsed[<span class="hljs-number">2</span>].parseInt.<span class="hljs-built_in">float</span>
+      <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;+&quot;</span> <span class="hljs-keyword">and</span> parsed[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;old&quot;</span>:
+        <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = <span class="hljs-number">2</span> * risk
+      <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;+&quot;</span>:
+        <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = 
+          risk + parsed[<span class="hljs-number">2</span>].parseInt.<span class="hljs-built_in">float</span>
+    <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Test&quot;</span>:
+      <span class="hljs-literal">result</span>.divisor = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+    <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;    If true&quot;</span>:
+      <span class="hljs-literal">result</span>.passTrue = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+    <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;    If false&quot;</span>:
+      <span class="hljs-literal">result</span>.passFalse = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+    <span class="hljs-keyword">else</span>: <span class="hljs-keyword">discard</span>
+
+<span class="hljs-keyword">for</span> m <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.readFile().split(<span class="hljs-string">&quot;</span><span class="hljs-meta">\n</span><span class="hljs-meta">\n</span><span class="hljs-string">&quot;</span>):
+  monkeys.add newMonkey(m)
+
+<span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;<span class="hljs-type">ROUNDS</span>:
+  <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;monkeys.len:
+    <span class="hljs-keyword">if</span> monkeys[i].items.len &gt; <span class="hljs-number">0</span>: monkeys[i].inspectItems()
+    <span class="hljs-keyword">echo</span> fmt(<span class="hljs-string">&quot;Monkey: {i} ({monkeys[i].inspectCount})&quot;</span>)
+  <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;</span>
+
+<span class="hljs-keyword">var</span> inspectCounts = newSeq[<span class="hljs-type">Natural</span>](monkeys.len)
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;monkeys.len: inspectCounts[i] = monkeys[i].inspectCount
+inspectCounts.sort(<span class="hljs-type">Descending</span>)
+answer = inspectCounts[<span class="hljs-number">0</span>] * inspectCounts[<span class="hljs-number">1</span>]</code></pre><pre class="nb-output"><samp>Monkey: 0 (6)
+Monkey: 1 (5)
+Monkey: 2 (3)
+Monkey: 3 (9)
+Monkey: 4 (7)
+Monkey: 5 (16)
+Monkey: 6 (10)
+Monkey: 7 (7)
+
+Monkey: 0 (13)
+Monkey: 1 (6)
+Monkey: 2 (14)
+Monkey: 3 (20)
+Monkey: 4 (13)
+Monkey: 5 (24)
+Monkey: 6 (26)
+Monkey: 7 (8)
+
+Monkey: 0 (24)
+Monkey: 1 (8)
+Monkey: 2 (30)
+Monkey: 3 (28)
+Monkey: 4 (22)
+Monkey: 5 (35)
+Monkey: 6 (35)
+Monkey: 7 (10)
+
+Monkey: 0 (40)
+Monkey: 1 (11)
+Monkey: 2 (39)
+Monkey: 3 (37)
+Monkey: 4 (27)
+Monkey: 5 (51)
+Monkey: 6 (46)
+Monkey: 7 (11)
+
+Monkey: 0 (48)
+Monkey: 1 (15)
+Monkey: 2 (50)
+Monkey: 3 (53)
+Monkey: 4 (32)
+Monkey: 5 (59)
+Monkey: 6 (59)
+Monkey: 7 (15)
+
+Monkey: 0 (59)
+Monkey: 1 (16)
+Monkey: 2 (63)
+Monkey: 3 (61)
+Monkey: 4 (37)
+Monkey: 5 (70)
+Monkey: 6 (71)
+Monkey: 7 (17)
+
+Monkey: 0 (72)
+Monkey: 1 (18)
+Monkey: 2 (71)
+Monkey: 3 (70)
+Monkey: 4 (45)
+Monkey: 5 (83)
+Monkey: 6 (82)
+Monkey: 7 (20)
+
+Monkey: 0 (83)
+Monkey: 1 (19)
+Monkey: 2 (82)
+Monkey: 3 (81)
+Monkey: 4 (49)
+Monkey: 5 (94)
+Monkey: 6 (95)
+Monkey: 7 (21)
+
+Monkey: 0 (94)
+Monkey: 1 (21)
+Monkey: 2 (95)
+Monkey: 3 (92)
+Monkey: 4 (54)
+Monkey: 5 (105)
+Monkey: 6 (107)
+Monkey: 7 (24)
+
+Monkey: 0 (107)
+Monkey: 1 (24)
+Monkey: 2 (106)
+Monkey: 3 (100)
+Monkey: 4 (59)
+Monkey: 5 (118)
+Monkey: 6 (117)
+Monkey: 7 (25)
+
+Monkey: 0 (119)
+Monkey: 1 (29)
+Monkey: 2 (116)
+Monkey: 3 (113)
+Monkey: 4 (63)
+Monkey: 5 (130)
+Monkey: 6 (131)
+Monkey: 7 (26)
+
+Monkey: 0 (129)
+Monkey: 1 (30)
+Monkey: 2 (129)
+Monkey: 3 (124)
+Monkey: 4 (70)
+Monkey: 5 (140)
+Monkey: 6 (142)
+Monkey: 7 (28)
+
+Monkey: 0 (143)
+Monkey: 1 (35)
+Monkey: 2 (140)
+Monkey: 3 (133)
+Monkey: 4 (75)
+Monkey: 5 (154)
+Monkey: 6 (152)
+Monkey: 7 (30)
+
+Monkey: 0 (154)
+Monkey: 1 (36)
+Monkey: 2 (149)
+Monkey: 3 (146)
+Monkey: 4 (80)
+Monkey: 5 (165)
+Monkey: 6 (166)
+Monkey: 7 (32)
+
+Monkey: 0 (163)
+Monkey: 1 (38)
+Monkey: 2 (162)
+Monkey: 3 (156)
+Monkey: 4 (83)
+Monkey: 5 (175)
+Monkey: 6 (178)
+Monkey: 7 (33)
+
+Monkey: 0 (177)
+Monkey: 1 (39)
+Monkey: 2 (173)
+Monkey: 3 (165)
+Monkey: 4 (85)
+Monkey: 5 (189)
+Monkey: 6 (188)
+Monkey: 7 (34)
+
+Monkey: 0 (189)
+Monkey: 1 (41)
+Monkey: 2 (183)
+Monkey: 3 (178)
+Monkey: 4 (87)
+Monkey: 5 (201)
+Monkey: 6 (202)
+Monkey: 7 (35)
+
+Monkey: 0 (199)
+Monkey: 1 (41)
+Monkey: 2 (197)
+Monkey: 3 (189)
+Monkey: 4 (88)
+Monkey: 5 (211)
+Monkey: 6 (214)
+Monkey: 7 (36)
+
+Monkey: 0 (213)
+Monkey: 1 (41)
+Monkey: 2 (209)
+Monkey: 3 (198)
+Monkey: 4 (89)
+Monkey: 5 (225)
+Monkey: 6 (223)
+Monkey: 7 (37)
+
+Monkey: 0 (225)
+Monkey: 1 (41)
+Monkey: 2 (218)
+Monkey: 3 (212)
+Monkey: 4 (90)
+Monkey: 5 (237)
+Monkey: 6 (238)
+Monkey: 7 (39)</samp></pre>
+<p>Answer is: <strong>56406</strong></p>
+<script defer>/* Generated by the Nim Compiler v1.6.10 */
+var framePtr = null;
+var excHandler = 0;
+var lastJSError = null;
+if (!Math.trunc) {
+  Math.trunc = function(v) {
+    v = +v;
+    if (!isFinite(v)) return v;
+    return (v - v % 1) || (v < 0 ? -0 : v === 0 ? v : 0);
+  };
+}
+
+var objectID_620757154 = [0];
+</script>
+</main>
+<footer>
+<hr>
+<div class="nb-box">
+  <span><span class="nb-small">made with <a href="https://pietroppeter.github.io/nimib/">nimib 🐳</a></span></span>
+  <span></span>
+  <span><button class="nb-small" id="show" onclick="toggleSourceDisplay()">Show Source</button></span>
+</div>
+</footer>
+<section id="source">
+<pre><code class="nim hljs"><span class="hljs-keyword">import</span> strformat, strutils, algorithm, sequtils, math
+<span class="hljs-keyword">import</span> nimib
+
+<span class="hljs-keyword">const</span> 
+  <span class="hljs-type">DAY</span> = <span class="hljs-number">11</span>
+  <span class="hljs-type">PART</span> = <span class="hljs-number">1</span>
+  <span class="hljs-type">DOCNAME</span> = <span class="hljs-string">fmt&quot;d{DAY:02}p{PART}&quot;</span>
+
+nbInit
+nb.title = <span class="hljs-type">DOCNAME</span>
+
+nbText: <span class="hljs-string">fmt&quot;&quot;&quot;
+# Day {DAY:02} part {PART}
+&quot;&quot;&quot;</span>
+
+nbCode:
+  <span class="hljs-keyword">const</span> <span class="hljs-type">ROUNDS</span> = <span class="hljs-number">20</span>
+
+  <span class="hljs-keyword">type</span>
+    <span class="hljs-type">Monkey</span> = <span class="hljs-keyword">ref</span> <span class="hljs-keyword">object</span>
+      items: <span class="hljs-built_in">seq</span>[<span class="hljs-built_in">float</span>]
+      riskOp: <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span>
+      divisor, passTrue, passFalse, inspectCount: <span class="hljs-type">Natural</span>
+
+  <span class="hljs-keyword">var</span>
+    monkeys = newSeq[<span class="hljs-type">Monkey</span>]()
+    answer: <span class="hljs-type">Natural</span>
+
+  <span class="hljs-keyword">proc</span> inspectItems(m: <span class="hljs-keyword">var</span> <span class="hljs-type">Monkey</span>) =
+    m.items.apply(m.riskOp)
+    <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> m.items:
+      m.inspectCount.inc
+      <span class="hljs-keyword">let</span> targetMonkey = <span class="hljs-keyword">if</span> item.<span class="hljs-built_in">int</span> <span class="hljs-keyword">mod</span> m.divisor == <span class="hljs-number">0</span>: m.passTrue <span class="hljs-keyword">else</span>: m.passFalse
+      monkeys[targetMonkey].items.add item
+    m.items = @[]
+
+  <span class="hljs-keyword">proc</span> newMonkey(s: <span class="hljs-built_in">string</span>): <span class="hljs-type">Monkey</span> =
+    <span class="hljs-literal">result</span> = <span class="hljs-type">Monkey</span>()
+    <span class="hljs-keyword">var</span> attrs = s.splitLines
+    <span class="hljs-keyword">while</span> attrs.len &gt; <span class="hljs-number">0</span>:
+      <span class="hljs-keyword">var</span> a = attrs.pop.split(<span class="hljs-string">':'</span>)
+      <span class="hljs-keyword">case</span> a[<span class="hljs-number">0</span>]
+      <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Starting items&quot;</span>:
+        a[<span class="hljs-number">1</span>] = a[<span class="hljs-number">1</span>].replace(<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-string">&quot;&quot;</span>)
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> a[<span class="hljs-number">1</span>].split(<span class="hljs-string">','</span>): <span class="hljs-literal">result</span>.items.add i.parseInt.<span class="hljs-built_in">float</span>
+      <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Operation&quot;</span>:
+        <span class="hljs-keyword">let</span> parsed = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">2</span>)
+        <span class="hljs-keyword">if</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;*&quot;</span> <span class="hljs-keyword">and</span> parsed[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;old&quot;</span>:
+          <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = risk * risk
+        <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;*&quot;</span>:
+          <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = 
+            risk * parsed[<span class="hljs-number">2</span>].parseInt.<span class="hljs-built_in">float</span>
+        <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;+&quot;</span> <span class="hljs-keyword">and</span> parsed[<span class="hljs-number">2</span>] == <span class="hljs-string">&quot;old&quot;</span>:
+          <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = <span class="hljs-number">2</span> * risk
+        <span class="hljs-keyword">elif</span> parsed[<span class="hljs-number">1</span>] == <span class="hljs-string">&quot;+&quot;</span>:
+          <span class="hljs-literal">result</span>.riskOp = <span class="hljs-keyword">proc</span>(risk: <span class="hljs-built_in">float</span>): <span class="hljs-built_in">float</span> = 
+            risk + parsed[<span class="hljs-number">2</span>].parseInt.<span class="hljs-built_in">float</span>
+      <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;  Test&quot;</span>:
+        <span class="hljs-literal">result</span>.divisor = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+      <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;    If true&quot;</span>:
+        <span class="hljs-literal">result</span>.passTrue = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+      <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;    If false&quot;</span>:
+        <span class="hljs-literal">result</span>.passFalse = a[<span class="hljs-number">1</span>].rsplit(<span class="hljs-string">' '</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">1</span>].parseInt
+      <span class="hljs-keyword">else</span>: <span class="hljs-keyword">discard</span>
+
+  <span class="hljs-keyword">for</span> m <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;input.txt&quot;</span>.readFile().split(<span class="hljs-string">&quot;</span><span class="hljs-meta">\n</span><span class="hljs-meta">\n</span><span class="hljs-string">&quot;</span>):
+    monkeys.add newMonkey(m)
+
+  <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;<span class="hljs-type">ROUNDS</span>:
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;monkeys.len:
+      <span class="hljs-keyword">if</span> monkeys[i].items.len &gt; <span class="hljs-number">0</span>: monkeys[i].inspectItems()
+      <span class="hljs-keyword">echo</span> fmt(<span class="hljs-string">&quot;Monkey: {i} ({monkeys[i].inspectCount})&quot;</span>)
+    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&quot;</span>
+
+  <span class="hljs-keyword">var</span> inspectCounts = newSeq[<span class="hljs-type">Natural</span>](monkeys.len)
+  <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">0.</span>.&lt;monkeys.len: inspectCounts[i] = monkeys[i].inspectCount
+  inspectCounts.sort(<span class="hljs-type">Descending</span>)
+  answer = inspectCounts[<span class="hljs-number">0</span>] * inspectCounts[<span class="hljs-number">1</span>]
+
+
+nbText: <span class="hljs-string">fmt&quot;&quot;&quot;
+Answer is: **{answer}**
+&quot;&quot;&quot;</span>
+
+nb.filename = <span class="hljs-string">fmt&quot;../../html/{DOCNAME}.html&quot;</span>
+nbSave
+</code></pre>
+</section><script>
+function toggleSourceDisplay() {
+  var btn = document.getElementById("show")
+  var source = document.getElementById("source");
+  if (btn.innerHTML=="Show Source") {
+    btn.innerHTML = "Hide Source";
+    source.style.display = "block";
+  } else {
+    btn.innerHTML = "Show Source";
+    source.style.display = "none";
+  }
+}
+</script></body>
+</html>
