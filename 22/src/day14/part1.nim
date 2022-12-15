@@ -37,7 +37,7 @@ nbCode:
       if m[s.x][s.y+i] == Air: 
         i.inc
         continue
-      if m[s.x][s.y+i] in [Rock, Sand]:
+      if m[s.x][s.y+i] in {Rock, Sand}:
         if m[s.x-1][s.y+i] == Air: s.x.dec
         elif m[s.x+1][s.y+i] == Air: s.x.inc
         else: 

@@ -46,7 +46,7 @@ nbCode:
       if m[s.x][s.y+i] == Air: 
         i.inc
         continue
-      if m[s.x][s.y+i] in [Rock, Sand]:
+      if m[s.x][s.y+i] in {Rock, Sand}:
         if s.x == 0:
           if leftHeap.isStanding(s.y+i): m[s.x][s.y+i-1] = Rock
           return true
